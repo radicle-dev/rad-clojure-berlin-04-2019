@@ -1,0 +1,23 @@
+
+(import prelude/set :as 'set)
+
+(def projects
+  "A dict with all known projects"
+  (ref {}))
+
+(def add-project
+  ""
+  (fn [project desc]
+    (modify-ref
+      projects
+      (fn [ps] (insert project {:description desc :stars 0} ps)))))
+
+(def star-project
+  ""
+  (fn [project]
+    (over-ref
+      projects
+      (.. (@ project) (@ :stars))
+      (fn [stars] (+ stars 1)))))
+
+
