@@ -20,3 +20,14 @@ machine.
 registry operations - adding a project to the registry, and staring a project.
 We could have used any other language besides Python here (including Radicle).
 
+## Using
+
+Install [Radicle](https://radicle.xyz/docs/index.html#installation-setup).
+Make sure the Radicle daemons are running. If you installed from source, that's:
+
+```
+rad daemon-ipfs
+rad daemon-radicle
+```
+
+Then run `./registry.py --help` for usage.
