@@ -1,0 +1,35 @@
+#!/usr/bin/env radicle
+
+#|
+
+This file provides a simple CLI interface to the registry machine we've built.
+
+Unlike the machine code itself, which *must* be written in the Radicle
+language, this can be written in any language.
+
+|#
+
+(def create-registry
+  "Create a registry machine."
+  (fn []
+      ;; We create a new machine.
+      (def id (new-machine!))
+      ;; Then send the prelude.
+      (machine/send-prelude! id)
+      ;; Then send the registry.rad file in this repo.
+      (send-code! id "registry.rad")))
+
+(def list-projects
+  "List all the projects in a registry machine."
+  (fn [machine]
+      (machine/query! machine '(list-projects))))
+
+(def star-project
+  ""
+  (fn [machine project-id]
+      (machine/send! machine (list 'star-project project-id))))
+
+(def add-project
+  ""
+  (fn [machine project-id]
+      (machine/send! machine (list 'star-project project-id))))

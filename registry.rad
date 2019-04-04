@@ -1,5 +1,23 @@
+#|
+
+The registry machine.
+
+The usual pattern is to submit the prelude code to a machine before the
+machine-specific code (i.e., before this file). So we can assume the prelude is
+already available.
+
+Note that there are quite a few things that we skipped in the interest of
+succintness:
+
+- Authentication and authorization
+- Nonces and machine ids to prevent replay attacks
+- Restricting eval
+
+You can load this file in a REPL.
+|#
 
 (import prelude/set :as 'set)
+(import prelude/lens '[over-ref .. @] :unqualified)
 
 (def projects
   "A dict with all known projects"
@@ -8,16 +26,17 @@
 (def add-project
   ""
   (fn [project desc]
-    (modify-ref
-      projects
-      (fn [ps] (insert project {:description desc :stars 0} ps)))))
+      (modify-ref projects
+                  (fn [ps] (insert project {:description desc :stars 0} ps)))))
 
 (def star-project
   ""
   (fn [project]
-    (over-ref
-      projects
-      (.. (@ project) (@ :stars))
-      (fn [stars] (+ stars 1)))))
+      (over-ref projects
+                (.. (@ project) (@ :stars))
+                (fn [stars] (+ stars 1)))))
 
-
+(def list-projects
+  ""
+  (fn []
+      (read-ref projects)))

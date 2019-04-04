@@ -11,14 +11,15 @@ A "machine", in the Radicle terminology, is not a physical computer, but a
 little program that anyone can interact with. A little like a REPL, but
 collaborative. A little like a server, but p2p.
 
+
 ## Layout
 
 `registry.rad` is a file written in the Radicle language that defines our
 machine.
 
-`registry.py` is a Python program that provides a CLI tool for the basic
-registry operations - adding a project to the registry, and staring a project.
-We could have used any other language besides Python here (including Radicle).
+`registry-cli.rad` is a program that provides a CLI tool for the basic registry
+operations - adding a project to the registry, and staring a project.  We could
+have used any other language besides Radicle here.
 
 ## Using
 
