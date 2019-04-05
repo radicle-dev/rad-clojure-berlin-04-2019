@@ -9,6 +9,12 @@ language, this can be written in any language.
 
 |#
 
+(load! (find-module-file! "prelude.rad"))
+(import prelude/machine '[new-machine! send-code!] :unqualified)
+
+(def machine "12D3KooWNoujg6u2F92DF9uX2MBdPYRxasds9ubxao3eTYg9C6zq")
+;; Commands for interacting with the registry machine
+
 (def create-registry
   "Create a registry machine."
   (fn []
@@ -17,19 +23,54 @@ language, this can be written in any language.
       ;; Then send the prelude.
       (machine/send-prelude! id)
       ;; Then send the registry.rad file in this repo.
-      (send-code! id "registry.rad")))
+      (send-code! id "registry.rad")
+      (put-str! (string-append "Registry id: " id))))
 
 (def list-projects
   "List all the projects in a registry machine."
-  (fn [machine]
-      (machine/query! machine '(list-projects))))
+  (fn []
+      (print! (machine/query! machine '(list-projects)))))
 
 (def star-project
   ""
-  (fn [machine project-id]
-      (machine/send! machine (list 'star-project project-id))))
+  (fn [project-id]
+      (machine/send! machine [(list 'star-project project-id)])
+      (put-str! "Starred project!")))
 
 (def add-project
   ""
-  (fn [machine project-id]
-      (machine/send! machine (list 'star-project project-id))))
+  (fn [project-id desc]
+      (machine/send! machine [(list 'add-project project-id desc)])
+      (put-str! "Added project!")))
+
+
+;; Command line parsing and usage
+
+(def help
+  "registry-cli
+
+   Usage:
+        registry-cli new
+        registry-cli list
+        registry-cli add <PROJECT-ID> <DESCRIPTION>
+        registry-cli star <PROJECT-ID>
+
+     new          - Create a new registry
+     list         - List projects
+     add          - Add a project to the registry
+     star         - Star a project
+  ")
+
+
+(def args (get-args!))
+
+(machine/catch-daemon!
+ (fn []
+   (match args
+          (/cmd-0 "new" help) (create-registry)
+          (/cmd-0 "list" help) (list-projects)
+          (/cmd-2 "add" 'project-id 'description help) (add-project project-id description)
+          (/cmd-1 "star" 'project-id help) (star-project project-id)
+          (/cmd-help) (put-str! help)
+          (/cons 'cmd _) (parse-failure (error/unknown-command cmd) help)
+          [] (put-str! help))))

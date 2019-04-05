@@ -17,6 +17,7 @@ You can load this file in a REPL.
 |#
 
 (import prelude/set :as 'set)
+(import prelude/ref '[modify-ref] :unqualified)
 (import prelude/lens '[over-ref .. @] :unqualified)
 
 (def projects
