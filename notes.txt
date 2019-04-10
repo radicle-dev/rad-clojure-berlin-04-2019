@@ -1,0 +1,6 @@
+
+                Radicle as a peer-to-peer REPL
+
+    - Website: https://radicle.xyz
+    - IRC for this talk: #radicle-clojure-meetup on freenode
+    - Repo for this talk: https://github.com/radicle-dev/rad-clojure-berlin-04-2019
