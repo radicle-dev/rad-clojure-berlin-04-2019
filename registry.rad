@@ -17,8 +17,11 @@ You can load this file in a REPL.
 |#
 
 (import prelude/set :as 'set)
+(import prelude/strings '[unlines] :unqualified)
 (import prelude/ref '[modify-ref] :unqualified)
 (import prelude/lens '[over-ref .. @] :unqualified)
+
+;; Basic functionality
 
 (def projects
   "A dict with all known projects"
@@ -41,3 +44,37 @@ You can load this file in a REPL.
   ""
   (fn []
       (read-ref projects)))
+
+(def query
+  "A pretty version of list-projects. The default frontend by default queries 'query'"
+  (fn []
+      (def go
+        (fn [p]
+            (match p
+                   ['project {:description 'd :stars 'n}] (string-append
+                                               "Project: "
+                                               project
+                                               "\nDescription: "
+                                               d
+                                               "\nStars: "
+                                               (show n))
+                   _ (do
+                       (put-str! "Improper project")
+                       (exit! 1)))))
+      (unlines (map go (seq (list-projects))))))
+
+;; The HTML frontend
+
+(def html
+  "A ref that keeps the current frontend."
+  (ref "QmWa7eSia84unLafaxaMWEr1teZY1DB3HVUTDrHn2YKh8N"))
+
+(def get-html
+  "Get the current frontend. Used by the radicle daemon."
+  (fn []
+      (read-ref html)))
+
+(def set-html
+  "Get the current frontend. Used by the radicle daemon."
+  (fn [h]
+      (write-ref html h)))

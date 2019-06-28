@@ -12,7 +12,16 @@ language, this can be written in any language.
 (load! (find-module-file! "prelude.rad"))
 (import prelude/machine '[new-machine! send-code!] :unqualified)
 
-(def machine "12D3KooWNoujg6u2F92DF9uX2MBdPYRxasds9ubxao3eTYg9C6zq")
+(def machine "12D3KooWLXpRzjvt7F2kFUeGeiR5g14sJhcaatb5gZMd4otM71Ht")
+
+
+
+(def url
+  (string-append
+    "http://localhost:8909/v0/machines/"
+    machine
+    "/frontend/index.html"))
+
 ;; Commands for interacting with the registry machine
 
 (def create-registry
@@ -29,7 +38,7 @@ language, this can be written in any language.
 (def list-projects
   "List all the projects in a registry machine."
   (fn []
-      (print! (machine/query! machine '(list-projects)))))
+      (print! (machine/query! machine '(query)))))
 
 (def star-project
   ""
@@ -54,11 +63,13 @@ language, this can be written in any language.
         registry-cli list
         registry-cli add <PROJECT-ID> <DESCRIPTION>
         registry-cli star <PROJECT-ID>
+        registry-cli url
 
      new          - Create a new registry
      list         - List projects
      add          - Add a project to the registry
      star         - Star a project
+     url          - Get the frontend URL
   ")
 
 
@@ -68,6 +79,7 @@ language, this can be written in any language.
  (fn []
    (match args
           (/cmd-0 "new" help) (create-registry)
+          (/cmd-0 "url" help) (put-str! url)
           (/cmd-0 "list" help) (list-projects)
           (/cmd-2 "add" 'project-id 'description help) (add-project project-id description)
           (/cmd-1 "star" 'project-id help) (star-project project-id)

@@ -1,0 +1,31 @@
+;; "12D3KooWKmHZGDaNzWbuCnyebQC4WkaiituTEVj19rGb1f9X1JFi"
+(import prelude/ref '[modify-ref] :unqualified)
+
+(def logs
+  "Chat logs"
+  (ref []))
+
+(def say
+  "Add a message"
+  (fn [msg]
+      (modify-ref (fn [r] (add-right msg r)) logs)))
+
+(def query
+  (fn []
+      (unlines (read-ref logs))))
+
+;; The HTML frontend
+
+(def html
+  "A ref that keeps the current frontend."
+  (ref "QmWa7eSia84unLafaxaMWEr1teZY1DB3HVUTDrHn2YKh8N"))
+
+(def get-html
+  "Get the current frontend. Used by the radicle daemon."
+  (fn []
+      (read-ref html)))
+
+(def set-html
+  "Get the current frontend. Used by the radicle daemon."
+  (fn [h]
+      (write-ref html h)))

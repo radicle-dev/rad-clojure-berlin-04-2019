@@ -1,0 +1,98 @@
+(import prelude/strings :unqualified)
+(import prelude/list :unqualified)
+(import prelude/machine :unqualified)
+(def i (ref 0))
+
+(def prompts
+  [
+"r a d i c l e
+-------------
+
+A P2P programming language
+
+Julian Arni - Monadic
+
+https://radicle.xyz
+"
+
+"An append-only log"
+
+"A *program* (a.k.a. machine)"
+
+"A REPL
+
+(demo)"
+
+"Determinism:
+
+- Can reconstitute the machine from the logs alone
+"
+
+"REPL:
+
+- Easy to define 'chat' functions
+"
+
+"REPL:
+
+- Easy to define 'chat' functions
+- But unsafe!
+"
+
+"REPL:
+
+- Easy to define 'chat' functions
+- But unsafe!
+- So we use validation
+"
+
+"REPL:
+
+- Easy to define 'chat' functions
+- But unsafe!
+- So we use validation
+- But now no longer upgradable
+"
+
+"Application:
+
+- Code collaboration
+"
+
+"Application:
+
+- Code collaboration
+- ...
+"
+
+"Extras:
+- Frontend
+"
+
+"Further:
+- *Transparent and verifiable* machines
+"
+])
+
+(def height 10)
+(def clear (fn [] (put-str! (unlines (repeat 50 " ")))))
+
+(def next
+  (fn []
+    (clear)
+    (def it (nth (read-ref i) prompts))
+    (def fill (unlines (repeat (- height (length (lines it))) " ")))
+    (put-str! it)
+    (put-str! "\n------\n")
+    (put-str! fill)
+    (modify-ref i \(+ 1 ?))))
+
+(def thanks!
+(fn []
+  (clear)
+  (put-str! "Thanks!
+
+June 11: Meetup at Full Node")))
+
+
+(clear)
